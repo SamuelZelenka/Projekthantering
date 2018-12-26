@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public int health { get { return health;} set { health += value;} }
-    public int mana { get { return mana; } set { mana += value; } }
-    public int armor { get { return armor; } set { armor += value; } }
+    public int health;
+    public int mana;
+    public int armor;
 
     int maxHealth = 30;
 
@@ -21,4 +21,32 @@ public class PlayerScript : MonoBehaviour
     {
         
     }
+
+    public void RemoveHealth(int value)
+    {
+        health -= value;
+    }
+
+    public void RemoveMana(int value)
+    {
+        mana -= value;
+    }
+
+    public void RemoveArmor(int value)
+    {
+        armor -= value;
+    }
+    public void AddHealth(int value)
+    {
+        health += value;
+    }
+    public void AddMana(int value)
+    {
+        mana += value;
+    }
+    public void AddArmor(int value)
+    {
+        armor += value;
+    }
+
 }

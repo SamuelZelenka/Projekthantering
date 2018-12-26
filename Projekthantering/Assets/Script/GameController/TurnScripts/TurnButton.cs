@@ -12,6 +12,8 @@ public class TurnButton : MonoBehaviour
     bool myTurn;
     Animation rotateAnim;
     GameObject myPlayer;
+
+    Animation uiTurnSplashAnim;
     Text uiTimer;
     GameObject gameController;
     
@@ -26,6 +28,7 @@ public class TurnButton : MonoBehaviour
         myTurn = true;
         rotateAnim = GetComponent<Animation>();
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
+        uiTurnSplashAnim = GameObject.Find("YourTurnSplash").GetComponent<Animation>();
 
 
     }
@@ -70,6 +73,7 @@ public class TurnButton : MonoBehaviour
     {
         rotateAnim.Play("EndTurn");
         myTurn = false;
+        
         gameController.GetComponent<GameController>().newTurn();
     }
 
@@ -78,7 +82,7 @@ public class TurnButton : MonoBehaviour
         rotateAnim.Play("ResetButton");
         turnTimer = maxTurnTime;
         myTurn = true;
-
+        uiTurnSplashAnim.Play();
         myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
 
     }

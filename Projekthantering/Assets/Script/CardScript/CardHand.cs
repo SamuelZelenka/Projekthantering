@@ -7,6 +7,8 @@ public class CardHand : MonoBehaviour {
     [SerializeField] float xOffset;
     [SerializeField] float zOffset;
     [SerializeField] float rotationZOffset;
+
+    GameObject myPlayer;
     RaycastHit hit;
     Ray ray;
     GameObject myDeck;
@@ -18,6 +20,7 @@ public class CardHand : MonoBehaviour {
     void Start ()
     {
         gameController = GameObject.FindGameObjectWithTag("GameController");
+        myPlayer = transform.parent.gameObject;
     }
 
     // Update is called once per frame
@@ -25,7 +28,6 @@ public class CardHand : MonoBehaviour {
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        print(gameController.name);
         if (gameController.GetComponent<GameController>().playedTurns == 0 && myCards.Count == 0)
         {
             for (int i = 0; i < 3; i++)
@@ -60,15 +62,17 @@ public class CardHand : MonoBehaviour {
 
     public void AddCardFromDeck()
     {
+        
         myDeck = GameObject.Find("CardDeckPlayerOne");
 
-        if(myDeck.transform.childCount > 0)
+        if (myDeck.transform.childCount > 0)
         {
             AddCardToHand(myDeck.transform.GetChild(0).gameObject);
         }
         else
         {
             print("out of cards");
+            myPlayer.GetComponent<PlayerScript>().RemoveHealth(1);
         }
     }
 
