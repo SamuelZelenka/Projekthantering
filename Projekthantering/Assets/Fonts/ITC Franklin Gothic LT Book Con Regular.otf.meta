@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 14b51ae004b06334a8602d6288af81c2
+guid: 386a1ce5ff59b9c4b84aa66d87d1280e
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: OPTIBelwe-Medium
+  fontName: ITC Franklin Gothic LT Book Con
   fontNames:
-  - OPTIBelwe-Medium
+  - ITC Franklin Gothic LT Book Con
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
