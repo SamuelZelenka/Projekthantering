@@ -11,10 +11,13 @@ public class CardHand : MonoBehaviour {
     Ray ray;
     GameObject myDeck;
     GameObject inspectedCard;
+    GameObject gameController;
 
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        gameController = GameObject.FindGameObjectWithTag("GameController");
     }
 
     // Update is called once per frame
@@ -22,6 +25,15 @@ public class CardHand : MonoBehaviour {
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        print(gameController.name);
+        if (gameController.GetComponent<GameController>().playedTurns == 0 && myCards.Count == 0)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                AddCardFromDeck();
+            }
+
+        }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             AddCardFromDeck();
@@ -38,19 +50,16 @@ public class CardHand : MonoBehaviour {
                 inspectedCard = hit.collider.gameObject;
                 InspectCard(hit.collider.gameObject);
             }
-
         }
         else
         {
             SortCards();
         }
-
     }
 
 
     public void AddCardFromDeck()
     {
-
         myDeck = GameObject.Find("CardDeckPlayerOne");
 
         if(myDeck.transform.childCount > 0)
@@ -69,6 +78,7 @@ public class CardHand : MonoBehaviour {
         myCards.Add(newCard);
         SortCards();
     }
+
     public void SortCards()
     {
         if (myCards.Count != 0)
