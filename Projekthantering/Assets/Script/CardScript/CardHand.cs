@@ -14,6 +14,9 @@ public class CardHand : MonoBehaviour {
     GameObject myDeck;
     GameObject inspectedCard;
     GameObject gameController;
+    GameObject instancedCard;
+    GameObject inspectCard;
+    bool isCreated;
 
 
     // Use this for initialization
@@ -21,6 +24,8 @@ public class CardHand : MonoBehaviour {
     {
         gameController = GameObject.FindGameObjectWithTag("GameController");
         myPlayer = transform.parent.gameObject;
+        isCreated = false;
+        inspectCard = GameObject.Find("InspectCard");
     }
 
     // Update is called once per frame
@@ -48,6 +53,8 @@ public class CardHand : MonoBehaviour {
                 if(inspectedCard != hit.collider.gameObject)
                 {
                     SortCards();
+                    Destroy(instancedCard);
+                    isCreated = false;
                 }
                 inspectedCard = hit.collider.gameObject;
                 InspectCard(hit.collider.gameObject);
@@ -56,6 +63,8 @@ public class CardHand : MonoBehaviour {
         else
         {
             SortCards();
+            Destroy(instancedCard);
+            isCreated = false;
         }
     }
 
@@ -100,7 +109,12 @@ public class CardHand : MonoBehaviour {
     }
     void InspectCard(GameObject Card)
     {
-            Card.GetComponent<SpriteRenderer>().sortingOrder = (myCards.Count + 1);
-            Card.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+        if (!isCreated)
+        {
+            instancedCard = Instantiate(Card, inspectCard.transform.position, Quaternion.Euler(90, 0, 0)) as GameObject;
+            instancedCard.tag = "Untagged";
+            instancedCard.transform.parent = inspectCard.transform;
+            isCreated = true;
+        }
     }
 }
