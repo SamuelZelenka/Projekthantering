@@ -100,7 +100,7 @@ public class CardHand : MonoBehaviour {
 
             for (int i = 0; i < myCards.Count; i++)
             {
-                myCards[i].GetComponent<SpriteRenderer>().sortingOrder = i;
+                //myCards[i].GetComponent<SpriteRenderer>().sortingOrder = i;
                 myCards[i].transform.position = new Vector3(transform.position.x + xOffset * i, transform.position.y + (0.1f * i), transform.position.z + zOffset * i);
                 myCards[i].transform.localRotation = Quaternion.Euler(90, 0, rotationZOffset * i);
             }
