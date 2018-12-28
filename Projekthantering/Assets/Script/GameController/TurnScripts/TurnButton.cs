@@ -29,9 +29,6 @@ public class TurnButton : MonoBehaviour
         rotateAnim = GetComponent<Animation>();
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
         uiTurnSplashAnim = GameObject.Find("YourTurnSplash").GetComponent<Animation>();
-        uiTurnSplashAnim.clip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/Animation/Splash/YourTurnSplash.anim");
-
-
     }
 
     // Update is called once per frame
