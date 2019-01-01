@@ -13,14 +13,18 @@ public class AIStateMachine : MonoBehaviour
     [SerializeField] States AI; 
     [SerializeField] Behaviour Strategy;
     public List<GameObject> deck; //Ai deck of cards.
+    [SerializeField] List<GameObject> hand;
     [SerializeField] GameObject cardDrawn; //Card picked from deck.
     [SerializeField] int cardOrder = 0;//What card been picked in order.
+    [SerializeField] int lastCard;
+    Transform deckOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         AI = States.init; //Starting state for ai.
-        Strategy = Behaviour.passive; //Starting behaviour for ai. 
+        Strategy = Behaviour.passive; //Starting behaviour for ai.
+        
     }
 
     // Update is called once per frame
@@ -28,15 +32,11 @@ public class AIStateMachine : MonoBehaviour
     {
         if (aiTurn)
         {
-            StateMachine();
-        }
-    }
-    void StateMachine()
-    {
             switch (AI)
             {
                 case States.init:
                     Init();
+                    print("Init done");
                     break;
                 case States.pickNewCard:
                     print("AI picking new card");
@@ -65,32 +65,32 @@ public class AIStateMachine : MonoBehaviour
                     //EndTurn();
                     break;
             }
-
+        }
     }
     void Init() 
     {
         //print("AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive");
-        StartCoroutine(AIStartUp());
+        //StartCoroutine(AIStartUp());
+        Strategy = (Behaviour)Random.Range(0, 3); //Sets ai behavior.
+        AI = States.pickNewCard; //Next state.
     }
     IEnumerator AIStartUp()
     {
         yield return new WaitForSeconds(3.0f);
-        Strategy = (Behaviour)Random.Range(0, 3);
-        AI = States.pickNewCard;
     }
     void PickNewCard()
     {
-        int lastCard = deck.Count;//Checks how many cards in deck.
+        lastCard = deck.Count;//Checks how many cards in deck.
         if (cardOrder == lastCard)//If AI on last card it starts from the beginning of deck again.
         {
             cardOrder = 0;
         }
-        else
-        {
-            cardDrawn = deck[cardOrder];
-            
-        }
-        AI = States.checkCards;
+        cardDrawn = deck[cardOrder]; //Draws card next in order.
+        hand.Add(cardDrawn); //Adds card to hand
+        Instantiate(cardDrawn);
+        cardDrawn = null; //Reset
+        
+        AI = States.checkCards; //Next state
     }
     void CheckCards()
     {
