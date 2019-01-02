@@ -9,7 +9,7 @@ public class AIStateMachine : MonoBehaviour
 {
     bool aiTurn = true; //Ai turn to play.
     //Enum
-    [SerializeField] enum States { init, pickNewCard, checkCards, playCard, useCards, useSkill, endTurn};
+    [SerializeField] enum States { init, pickNewCard, checkCards, playCard, useCards, useSkill, endTurn, wait};
     [SerializeField] enum Behaviour { passive, agressive, defensive}
     [SerializeField] States AI; 
     [SerializeField] Behaviour Strategy;
@@ -25,7 +25,7 @@ public class AIStateMachine : MonoBehaviour
     //Variables
     [SerializeField] int cardOrder = 0;//What card been picked in order.
     [SerializeField] int lastCard;//If deck is on last card in cycle.
-    [SerializeField] int mana;
+    public int mana;
     //Positions
     public Transform deckOffset;//Were to spawn cards
 
@@ -45,8 +45,10 @@ public class AIStateMachine : MonoBehaviour
             switch (AI)
             {
                 case States.init:
+                    //Initialize and wakes played sleeping cards.
                     Init();
                     print("Init done");
+                    print("mana");
                     break;
                 case States.pickNewCard:
                     print("AI picking new card");
@@ -74,6 +76,9 @@ public class AIStateMachine : MonoBehaviour
                     print("AI ends its turn");
                     EndTurn();
                     break;
+                case States.wait:
+                    print("Waiting for call");//Calls made from class AiCard.cs
+                    break;
             }
         }
     }
@@ -84,10 +89,14 @@ public class AIStateMachine : MonoBehaviour
         Strategy = (Behaviour)Random.Range(0, 3); //Sets ai behavior.
         if (table != null)//Wakes any card that is played in previous sound
         {
-            foreach (var item in table)
+            foreach (var item in table)//Search for any sleeping cards and wakes them.
             {
-                bool wakeUp;
-                //wakeUp = checkCard.GetComponent<AICard>().manaCost;
+                GameObject sleepingCard;
+                sleepingCard = item;
+                if (sleepingCard.GetComponent<AICard>().sleep == true)
+                {
+                    sleepingCard.GetComponent<AICard>().sleep = false;
+                }
             }
         }
         AI = States.pickNewCard; //Next state.
@@ -105,13 +114,13 @@ public class AIStateMachine : MonoBehaviour
         GameObject cloneCard;
         cloneCard = Instantiate(cardDrawn);
         cloneCard.transform.position = deckOffset.transform.position;
-        //cardDrawn = null; //Reset
-        
+        cardDrawn = null; //Reset
+        cardOrder++; //Activates next card as the one to draw first nextround.
         AI = States.checkCards; //Next state
     }
     void CheckCards()
     {
-        cardOrder++;//Increments to pick next card in deck
+        //Increments to pick next card in deck
         
         foreach (var card in hand)
         {
