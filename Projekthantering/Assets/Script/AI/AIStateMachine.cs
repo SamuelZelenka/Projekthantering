@@ -87,7 +87,7 @@ public class AIStateMachine : MonoBehaviour
             foreach (var item in table)
             {
                 bool wakeUp;
-                wakeUp = checkCard.GetComponent<AICard>().manaCost;
+                //wakeUp = checkCard.GetComponent<AICard>().manaCost;
             }
         }
         AI = States.pickNewCard; //Next state.
