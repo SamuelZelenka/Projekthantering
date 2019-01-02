@@ -8,16 +8,26 @@ using UnityEngine;
 public class AIStateMachine : MonoBehaviour
 {
     bool aiTurn = true; //Ai turn to play.
+    //Enum
     [SerializeField] enum States { init, pickNewCard, checkCards, playCard, useCards, useSkill, endTurn};
     [SerializeField] enum Behaviour { passive, agressive, defensive}
     [SerializeField] States AI; 
     [SerializeField] Behaviour Strategy;
+    //Lists
     public List<GameObject> deck; //Ai deck of cards.
-    [SerializeField] List<GameObject> hand;
+    [SerializeField] List<GameObject> hand;//Cards drawn form deck.
+    [SerializeField] List<GameObject> playable;
+    [SerializeField] List<GameObject> table;
+
+    //Referens objects
     [SerializeField] GameObject cardDrawn; //Card picked from deck.
+
+    //Variables
     [SerializeField] int cardOrder = 0;//What card been picked in order.
-    [SerializeField] int lastCard;
-    Transform deckOffset;
+    [SerializeField] int lastCard;//If deck is on last card in cycle.
+    [SerializeField] int mana;
+    //Positions
+    public Transform deckOffset;//Were to spawn cards
 
     // Start is called before the first frame update
     void Start()
@@ -49,12 +59,12 @@ public class AIStateMachine : MonoBehaviour
                     CheckCards();
                     break;
                 case States.playCard:
-                    print("AI plays cards from hand to table with choosen strategy");
-                    //PlayCard();
+                    //print("AI plays cards from hand to table with choosen strategy");
+                    PlayCard();
                     break;
                 case States.useCards:
                     print("Ai uses any cards that are voke");
-                    //UseCards();
+                    UseCards();
                     break;
                 case States.useSkill:
                     print("Ai uses skill");
@@ -62,22 +72,26 @@ public class AIStateMachine : MonoBehaviour
                     break;
                 case States.endTurn:
                     print("AI ends its turn");
-                    //EndTurn();
+                    EndTurn();
                     break;
             }
         }
     }
     void Init() 
     {
-        //print("AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive");
-        //StartCoroutine(AIStartUp());
+        //print("AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive", adds mana);
+        mana++;//Gets one mana/turn
         Strategy = (Behaviour)Random.Range(0, 3); //Sets ai behavior.
+        if (table != null)//Wakes any card that is played in previous sound
+        {
+            foreach (var item in table)
+            {
+
+            }
+        }
         AI = States.pickNewCard; //Next state.
     }
-    IEnumerator AIStartUp()
-    {
-        yield return new WaitForSeconds(3.0f);
-    }
+    
     void PickNewCard()
     {
         lastCard = deck.Count;//Checks how many cards in deck.
@@ -87,14 +101,58 @@ public class AIStateMachine : MonoBehaviour
         }
         cardDrawn = deck[cardOrder]; //Draws card next in order.
         hand.Add(cardDrawn); //Adds card to hand
-        Instantiate(cardDrawn);
-        cardDrawn = null; //Reset
+        GameObject cloneCard;
+        cloneCard = Instantiate(cardDrawn);
+        cloneCard.transform.position = deckOffset.transform.position;
+        //cardDrawn = null; //Reset
         
         AI = States.checkCards; //Next state
     }
     void CheckCards()
     {
-        cardOrder++;
+        cardOrder++;//Increments to pick next card in deck
+        
+        foreach (var card in hand)
+        {
+            GameObject checkCard;//Store current card
+            checkCard = card;
+            int checkManaCost;//Store mana cost of current card.
+            checkManaCost = checkCard.GetComponent<AICard>().manaCost;
+            print(checkManaCost);
+            if (mana <= checkManaCost)//Checks if Ai has enough mana to play this card.
+            {
+                playable.Add(checkCard);
+            }
+        }
         AI = States.playCard;
+    }
+    void PlayCard()
+    {
+        if (mana <= 0)//out of mana and Ai ends turn.
+        {
+            AI = States.endTurn;
+        }
+        //AI plays a card without Advanced algorithm (This will change in next scrum)
+        for (int i = 0; i < playable.Count; i++)
+        {
+            if (mana > 0)
+            {
+                GameObject pickFromHand = playable[i];//Saves the choice from list.
+                table.Add(pickFromHand);
+                pickFromHand.GetComponent<AICard>().played = true;
+                mana -= pickFromHand.GetComponent<AICard>().manaCost;//AI spends mana to play card
+                playable[i] = null;
+            }
+        }
+        AI = States.useCards;
+    }
+    void UseCards()
+    {
+        print(table);
+    }
+    void EndTurn() //Ai is out of options and ends turn.
+    {
+        //Set cards on the table to voke.
+        aiTurn = false;
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2394122457404434735}
   - component: {fileID: 2394122457404434732}
   - component: {fileID: 2394122457404434733}
+  - component: {fileID: 6532416323566468011}
   m_Layer: 0
   m_Name: Card1
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bbc905645c5c1d540807e42d005134ea, type: 2}
+  - {fileID: 2100000, guid: 7d24044cf27b2a941b6c35234f9d3cbb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,3 +93,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6532416323566468011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2394122457404434722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7d61af6e282de4f929b56495c34357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDrawn: 1
+  played: 0
+  AIHandOffset: {fileID: 341109079041533759, guid: b3c5237120d403743babb215979b73f8,
+    type: 3}
+  TableOffset: {fileID: 4744901818659439668, guid: 687b29d1aa4ef414192d8b9e2cc0e5aa,
+    type: 3}
+  manaCost: 1
+  faceDown: {fileID: 2800000, guid: f804fdb91b27f1147a242695372db87c, type: 3}
+  faceUp: {fileID: 2800000, guid: fce97d12729ea014a9a8986792c54226, type: 3}
