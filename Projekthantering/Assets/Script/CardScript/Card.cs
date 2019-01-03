@@ -20,29 +20,43 @@ public class Card : MonoBehaviour
     {
         gameController = GameObject.FindGameObjectWithTag("GameController");
         //health
+        hp = gameController.GetComponent<ReadCardData>().GetCardData(cardName).health;
         showHp = GameObject.Find($"{gameObject.name}/Canvas/DisplayHp").GetComponent<Text>();
-        showHp.text = "" + gameController.GetComponent<ReadCardData>().GetCardData(cardName).health;
+        showHp.text = "" + hp;
+
         //attack
+        attack = gameController.GetComponent<ReadCardData>().GetCardData(cardName).attack;
         showAttack = GameObject.Find($"{gameObject.name}/Canvas/DisplayAttack").GetComponent<Text>();
-        showAttack.text = "" + gameController.GetComponent<ReadCardData>().GetCardData(cardName).attack;
+        showAttack.text = "" + attack;
+        
         //name
         showCardName = GameObject.Find($"{gameObject.name}/Canvas/DisplayCardName").GetComponent<Text>();
-        showCardName.text = gameController.GetComponent<ReadCardData>().GetCardData(cardName).name;
+        showCardName.text = cardName;
+
         //Description text
+        cardText = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardText;
         showCardText = GameObject.Find($"{gameObject.name}/Canvas/DisplayCardText").GetComponent<Text>();
-        showCardText.text = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardText;
+        showCardText.text = cardText;
+
         //manacost
+        manaCost = gameController.GetComponent<ReadCardData>().GetCardData(cardName).manacost;
         showManaCost = GameObject.Find($"{gameObject.name}/Canvas/DisplayManaCost").GetComponent<Text>();
-        showManaCost.text = "" + gameController.GetComponent<ReadCardData>().GetCardData(cardName).manacost;
+        showManaCost.text = "" + manaCost;
+
         //cardtype
+        cardType = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardType;
         showCardType = GameObject.Find($"{gameObject.name}/Canvas/DisplayCardType").GetComponent<Text>();
-        showCardType.text = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardType;
+        showCardType.text = cardType;
+
         //card frame
+        frame = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardFrame;
         showFrame = GameObject.Find($"{gameObject.name}/Canvas/DisplayCardFrame").GetComponent<Image>();
-        showFrame.sprite = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardFrame;
+        showFrame.sprite = frame;
+
         //card portrait
-        showFrame = GameObject.Find($"{gameObject.name}/Canvas/DisplayPortrait").GetComponent<Image>();
-        showFrame.sprite = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardPortrait; ;
+        portrait = gameController.GetComponent<ReadCardData>().GetCardData(cardName).cardPortrait;
+        showPortrait = GameObject.Find($"{gameObject.name}/Canvas/DisplayPortrait").GetComponent<Image>();
+        showPortrait.sprite = portrait;
     }
 
     // Update is called once per frame

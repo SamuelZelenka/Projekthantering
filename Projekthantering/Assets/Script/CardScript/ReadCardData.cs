@@ -20,14 +20,9 @@ public class ReadCardData : MonoBehaviour
         readData = new StreamReader(textPath);
         while ((readLine = readData.ReadLine()) != null)
         {
-            print(readLine);
             ConvertStringToData(readLine);
         }
         readData.Close();
-        for (int i = 0; i < cardlist.Count; i++)
-        {
-            print(cardlist[i].name);
-        }
     }
 
     // Update is called once per frame
@@ -40,7 +35,7 @@ public class ReadCardData : MonoBehaviour
     {
         //data [0-7]{name, health, manacost, attack, cardtext, taunt, charge, battlecry}
         string[] data = line.Split('\t');
-        cardlist.Add(new CardData(data[0], int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4], StringToBool(data[5]), StringToBool(data[6]), StringToBool(data[7]), StringToBool(data[8]), data[9], data[10], data[11]));
+        cardlist.Add(new CardData(data[0], int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4], StringToBool(data[5]), StringToBool(data[6]), StringToBool(data[7]), StringToBool(data[8]), data[9]));
     }
     bool StringToBool(string input)
     {
@@ -48,13 +43,8 @@ public class ReadCardData : MonoBehaviour
         {
             return true;
         }
-        else if (input.ToLower() == "false")
-        {
-            return false;
-        }
         else
         {
-            print($"{input} is not a bool ");
             return false;
         }
     }
@@ -69,9 +59,7 @@ public class ReadCardData : MonoBehaviour
             }
         }
         return null;
-
     }
-
 }
 
 public class CardData
@@ -89,7 +77,7 @@ public class CardData
     public Sprite cardFrame;
     public Sprite cardPortrait;
 
-    public CardData(string name, int health, int manacost, int attack, string cardText, bool taunt, bool charge, bool battlecry, bool drunkRage, string cardType, string cardFrame, string cardPortrait)
+    public CardData(string name, int health, int manacost, int attack, string cardText, bool taunt, bool charge, bool battlecry, bool drunkRage, string cardType)
     {
         this.name = name;
         this.health = health;
@@ -101,8 +89,8 @@ public class CardData
         this.battlecry = battlecry;
         this.drunkRage = drunkRage;
         this.cardType = cardType;
-        this.cardFrame =  (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Frames/{cardFrame}.png", typeof(Sprite));
-        this.cardPortrait = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Portraits/Grove.png", typeof(Sprite));
+        this.cardFrame =  (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Frames/{cardType}.png", typeof(Sprite));
+        this.cardPortrait = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Portraits/{name}.png", typeof(Sprite));
     }
 
 }
