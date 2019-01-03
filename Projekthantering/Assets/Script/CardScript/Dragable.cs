@@ -34,9 +34,6 @@ public class Dragable : MonoBehaviour
 
     void Update()
     {
-
-        //GameObject[] cardPlacement;
-
         RaycastHit hit;
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
@@ -47,25 +44,6 @@ public class Dragable : MonoBehaviour
 
                 ifPlaced = true;
             }
-            /*else if (hit.collider.gameObject.tag == "Table" && ifPlaced != false)
-            {
-            }*/
         }
     }
-
-    /*void cardsOnTable()
-    {
-        while (ifPlaced == true)
-        {
-            GameObject[] cardsPlaced = GameObject.FindGameObjectsWithTag("Card");
-
-            foreach (GameObject card in cardsPlaced)
-            {
-                if ()
-                {
-
-                }
-            }
-        }
-    }*/
 }

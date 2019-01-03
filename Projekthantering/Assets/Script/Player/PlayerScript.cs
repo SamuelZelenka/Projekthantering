@@ -25,6 +25,8 @@ public class PlayerScript : MonoBehaviour
 
         attackIcon = GameObject.Find($"{name}/PlayerVisual/Attack");
         armorIcon = GameObject.Find($"{name}/PlayerVisual/Armor");
+
+        transform.Find($"{gameObject.name}/deck");
     }
 
     // Update is called once per frame

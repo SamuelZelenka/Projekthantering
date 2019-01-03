@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -12,17 +13,21 @@ public class TurnButton : MonoBehaviour
     bool myTurn;
     Animation rotateAnim;
     GameObject myPlayer;
+    GameObject aiPlayer;
 
     Animation uiTurnSplashAnim;
     Text uiTimer;
     GameObject gameController;
-    
+
+    int startTurn;
+    public System.Random coinFlip = new System.Random();
 
     // Start is called before the first frame update
     void Start()
     {
-        gameController = GameObject.Find("GameController");
+        gameController = GameObject.Find("GameController"); 
         myPlayer = transform.parent.gameObject;
+        aiPlayer = transform.parent.gameObject;
         maxTurnTime = 30;
         turnTimer = maxTurnTime;
         myTurn = true;
@@ -30,8 +35,18 @@ public class TurnButton : MonoBehaviour
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
         uiTurnSplashAnim = GameObject.Find("YourTurnSplash").GetComponent<Animation>();
         uiTurnSplashAnim.clip = AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/Animation/Splash/YourTurnSplash.anim");
+        startTurn = coinFlip.Next(1, 3);
 
-
+        if (startTurn == 1)
+        {
+            myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
+            myTurn = false;
+        }
+        if (startTurn == 2)
+        {
+            aiPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
+            myTurn = true;
+        }
     }
 
     // Update is called once per frame
@@ -99,5 +114,4 @@ public class TurnButton : MonoBehaviour
             uiTimer.color = new Color(255, 255, 255);
         }
     }
-
 }

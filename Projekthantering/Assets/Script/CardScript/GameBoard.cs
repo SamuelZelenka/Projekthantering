@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameBoard : MonoBehaviour
 {
-    public int playedTurns;
-
-    
-
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -19,10 +14,5 @@ public class GameController : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void newTurn()
-    {
-        playedTurns++;
     }
 }
