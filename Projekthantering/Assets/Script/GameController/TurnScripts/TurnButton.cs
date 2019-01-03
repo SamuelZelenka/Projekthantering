@@ -12,23 +12,39 @@ public class TurnButton : MonoBehaviour
     bool myTurn;
     Animation rotateAnim;
     GameObject myPlayer;
+    GameObject aiPlayer;
 
     Animation uiTurnSplashAnim;
     Text uiTimer;
     GameObject gameController;
-    
+
+    int startTurn;
+    public System.Random coinFlip = new System.Random();
 
     // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("GameController");
         myPlayer = transform.parent.gameObject;
+        aiPlayer = transform.parent.gameObject;
         maxTurnTime = 30;
         turnTimer = maxTurnTime;
         myTurn = true;
         rotateAnim = GetComponent<Animation>();
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
         uiTurnSplashAnim = GameObject.Find("YourTurnSplash").GetComponent<Animation>();
+        startTurn = coinFlip.Next(1, 3);
+
+        if (startTurn == 1)
+        {
+            myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
+            myTurn = false;
+        }
+        if (startTurn == 2)
+        {
+            aiPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
+            myTurn = true;
+        }
     }
 
     // Update is called once per frame
