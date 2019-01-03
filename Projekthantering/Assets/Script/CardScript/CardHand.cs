@@ -41,16 +41,12 @@ public class CardHand : MonoBehaviour {
             }
 
         }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            AddCardFromDeck();
-        }
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             if (hit.collider.CompareTag("PlayerOneCard"))
             {
-                if(inspectedCard != hit.collider.gameObject)
+                if (inspectedCard != hit.collider.gameObject)
                 {
                     SortCards();
                     Destroy(instancedCard);
@@ -84,14 +80,12 @@ public class CardHand : MonoBehaviour {
             myPlayer.GetComponent<PlayerScript>().RemoveHealth(1);
         }
     }
-
     public void AddCardToHand(GameObject newCard)
     {
         newCard.transform.SetParent(transform);
         myCards.Add(newCard);
         SortCards();
     }
-
     public void SortCards()
     {
         if (myCards.Count != 0)
@@ -117,4 +111,6 @@ public class CardHand : MonoBehaviour {
             isCreated = true;
         }
     }
+
+
 }
