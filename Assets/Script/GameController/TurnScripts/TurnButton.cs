@@ -25,7 +25,7 @@ public class TurnButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameController = GameObject.Find("GameController");
+        gameController = GameObject.Find("GameController"); 
         myPlayer = transform.parent.gameObject;
         aiPlayer = transform.parent.gameObject;
         maxTurnTime = 30;
@@ -39,7 +39,6 @@ public class TurnButton : MonoBehaviour
 
         if (startTurn == 1)
         {
-            
             myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
             myTurn = false;
         }
