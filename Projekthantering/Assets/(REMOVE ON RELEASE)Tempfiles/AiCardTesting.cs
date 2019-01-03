@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class AiCardTesting : MonoBehaviour
 {
-    public int playedTurns;
-
-    
-
-    
+    public int manaCost = 1;
+    public string type = "Creature";
     // Start is called before the first frame update
     void Start()
     {
@@ -19,10 +16,5 @@ public class GameController : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void newTurn()
-    {
-        playedTurns++;
     }
 }

@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class AiDeckTest : MonoBehaviour
 {
-    public int playedTurns;
-
-    
-
-    
+    public List<GameObject> cards; 
     // Start is called before the first frame update
     void Start()
     {
-        
+        cards = new List<GameObject>();
+
     }
 
     // Update is called once per frame
@@ -21,8 +18,4 @@ public class GameController : MonoBehaviour
         
     }
 
-    public void newTurn()
-    {
-        playedTurns++;
-    }
 }
