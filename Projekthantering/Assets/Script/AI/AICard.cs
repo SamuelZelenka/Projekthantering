@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class AICard : MonoBehaviour
 {
-    [SerializeField]bool isDrawn = true; //Ai draws a card from deck and moves it to hand.
-    public bool played = false; //Ai plays card and moves it out on the table.
+    //[SerializeField]bool isDrawn = true; //Ai draws a card from deck and moves it to hand.
+    //public bool played = false; //Ai plays card and moves it out on the table.
     public bool sleep = true;//Card has just been played.
 
-    public Transform AIHandOffset;//Were the card travels after been drawn
-    public Transform TableOffset;
+    //public Transform AIHandOffset;//Were the card travels after been drawn
+    //public Transform TableOffset;
 
     float speed = 5.0f;
     public int manaCost;
@@ -23,11 +23,11 @@ public class AICard : MonoBehaviour
 
     void Start()
     {
-        rend = GetComponent<Renderer>();
-        played = false;
+        //rend = GetComponent<Renderer>();
+        //played = false;
         
     }
-    // Update is called once per frame
+    /*/ Update is called once per frame
     void Update()
     {
         if (isDrawn)//Starts moving to hand from deck
@@ -38,13 +38,9 @@ public class AICard : MonoBehaviour
         if (transform.position == AIHandOffset.transform.position)//Stopes movement
         {
             isDrawn = false;
-            Invoke("PlayCard", 3);
+            
         }
-        
-    }
-    void PlayCard()
-    {
-        if (played && isDrawn == false)//Starts moving to Table from hand;
+        if (played)//Starts moving to Table from hand;
         {
             rend.material.mainTexture = faceUp;
             float step = speed * Time.deltaTime;
@@ -54,5 +50,7 @@ public class AICard : MonoBehaviour
         {
             played = false;
         }
-    }
+
+    }*/
+
 }

@@ -8,32 +8,40 @@ using UnityEngine;
 public class AIStateMachine : MonoBehaviour
 {
     bool aiTurn = true; //Ai turn to play.
+    bool firstTurn;
     //Enum
-    [SerializeField] enum States { init, pickNewCard, checkCards, playCard, useCards, useSkill, endTurn, wait};
+    [SerializeField] enum States { init, pickNewCard, cardToHand, playCard, cardToTable, moveToTable, useCards, useSkill, endTurn, wait};
     [SerializeField] enum Behaviour { passive, agressive, defensive}
     [SerializeField] States AI; 
     [SerializeField] Behaviour Strategy;
+
     //Lists
     public List<GameObject> deck; //Ai deck of cards.
     [SerializeField] List<GameObject> hand;//Cards drawn form deck.
-    [SerializeField] List<GameObject> playable;
     [SerializeField] List<GameObject> table;
 
     //Referens objects
-    [SerializeField] GameObject cardDrawn; //Card picked from deck.
+    [SerializeField] GameObject activeCard; //Card picked from deck and used for actions.
+    [SerializeField] GameObject cloneCard;
 
     //Variables
     [SerializeField] int cardOrder = 0;//What card been picked in order.
     [SerializeField] int lastCard;//If deck is on last card in cycle.
+    
+    public float cardSpeed;//How fast card moves on table.
+    public int hp = 30;
     public int mana;
-    //Positions
+    //Positions offsets
     public Transform deckOffset;//Were to spawn cards
+    public Transform aIHandOffset;//Were ai hand is located.
+    public Transform tableOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         AI = States.init; //Starting state for ai.
         Strategy = Behaviour.passive; //Starting behaviour for ai.
+        firstTurn = true;
         
     }
 
@@ -45,30 +53,30 @@ public class AIStateMachine : MonoBehaviour
             switch (AI)
             {
                 case States.init:
-                    //Initialize and wakes played sleeping cards.
+                    //Initialize and wakes played sleeping cards. takes three cards if it's Ai first turn.
                     Init();
-                    print("Init done");
-                    print("mana");
                     break;
-                case States.pickNewCard:
-                    print("AI picking new card");
-                    print(Strategy);
+                case States.pickNewCard: //Picks a card from deck.
                     PickNewCard();
                     break;
-                case States.checkCards:
-                    //print("AI is checking cards and determined what to do");
-                    print("cardDraw");
-                    CheckCards();
+                case States.cardToHand: //Moves card to hand
+                    CardToHand();
                     break;
-                case States.playCard:
-                    //print("AI plays cards from hand to table with choosen strategy");
+                case States.playCard: //Checks cards and plays possible card 
                     PlayCard();
+                    //Invoke("PlayCard", 2); 
+                    break;
+                case States.cardToTable:
+                    CardToTable();
                     break;
                 case States.useCards:
-                    print("Ai uses any cards that are voke");
+                    //print("Ai uses any cards that are voke");
                     UseCards();
                     break;
-                case States.useSkill:
+                case States.moveToTable: //Moves card to table. FLIP CARD NEEDED!
+                    MoveToTable();
+                    break;
+                case States.useSkill: //NOT DONE! Attack sekvens needs to be tied to ´player cards.
                     print("Ai uses skill");
                     //UseSkill();
                     break;
@@ -76,20 +84,17 @@ public class AIStateMachine : MonoBehaviour
                     print("AI ends its turn");
                     EndTurn();
                     break;
-                case States.wait:
-                    print("Waiting for call");//Calls made from class AiCard.cs
-                    break;
+                
             }
         }
     }
-    void Init() 
+    void Init() //AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive", adds mana), takes three card if its first turn.
     {
-        //print("AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive", adds mana);
-        mana++;//Gets one mana/turn
+        mana++;//AI Gets one mana/turn
         Strategy = (Behaviour)Random.Range(0, 3); //Sets ai behavior.
         if (table != null)//Wakes any card that is played in previous sound
         {
-            foreach (var item in table)//Search for any sleeping cards and wakes them.
+            foreach (GameObject item in table)//Search for any sleeping cards and wakes them.
             {
                 GameObject sleepingCard;
                 sleepingCard = item;
@@ -99,70 +104,118 @@ public class AIStateMachine : MonoBehaviour
                 }
             }
         }
+        if (firstTurn)//First turn Ai gets three cards to play with
+        {
+            for (int i = 0; i < deck.Count; i++)
+            {
+                if (i > 2) //Three cards been played
+                {
+                    break;
+                }
+                activeCard = deck[i]; //Makes first card in deck active.
+                cloneCard = Instantiate(activeCard); //Makes a copy off the prefab.
+                hand.Add(cloneCard); //Add card to hand
+                aIHandOffset.transform.position;
+                cloneCard.transform.position = aIHandOffset.transform.position; //Moves to hand !!THIS NEEDS ANIMATION!!
+            }
+        }
+        print("Init done");
         AI = States.pickNewCard; //Next state.
     }
     
-    void PickNewCard()
+    void PickNewCard()//This method needs AI getting hurt if it runs out of cards
     {
-        lastCard = deck.Count;//Checks how many cards in deck.
-        if (cardOrder == lastCard)//If AI on last card it starts from the beginning of deck again.
+        lastCard = deck.Count;//Checks how many cards in deck. 
+        if (cardOrder == lastCard)//If AI on last card it starts from the beginning of deck again.This solution until the right cards are in play. REMOVES LATER!
         {
             cardOrder = 0;
         }
-        cardDrawn = deck[cardOrder]; //Draws card next in order.
-        hand.Add(cardDrawn); //Adds card to hand
-        GameObject cloneCard;
-        cloneCard = Instantiate(cardDrawn);
-        cloneCard.transform.position = deckOffset.transform.position;
-        cardDrawn = null; //Reset
-        cardOrder++; //Activates next card as the one to draw first nextround.
-        AI = States.checkCards; //Next state
+        activeCard = deck[cardOrder]; //Draws card next in order.
+        cloneCard = Instantiate(activeCard); //Creates a clone of prefab
+        hand.Add(cloneCard);//Adds the clone of card to hand list
+        cardOrder++; //Increments the card order for next round.
+        cloneCard.transform.position = deckOffset.transform.position; //Sets position of card
+        AI = States.cardToHand; //Next state
     }
-    void CheckCards()
+    void CardToHand()
     {
-        //Increments to pick next card in deck
-        
-        foreach (var card in hand)
+        if (cloneCard.transform.position != aIHandOffset.transform.position)//Checks if card is in hand if not moves it.
         {
-            GameObject checkCard;//Store current card
-            checkCard = card;
-            int checkManaCost;//Store mana cost of current card.
-            checkManaCost = checkCard.GetComponent<AICard>().manaCost;
-            print(checkManaCost);
-            if (mana <= checkManaCost)//Checks if Ai has enough mana to play this card.
-            {
-                playable.Add(checkCard);
-            }
+            cloneCard.transform.position = Vector3.MoveTowards(cloneCard.transform.position, aIHandOffset.transform.position, cardSpeed * Time.deltaTime);
         }
-        AI = States.playCard;
+        else //Movement complete
+        {
+            activeCard = null; //Resets the card AI is using.
+            cloneCard = null; //Erase the cloneCard from memory.
+            AI = States.playCard; //Next state
+        }
     }
+   
     void PlayCard()
     {
-        if (mana <= 0)//out of mana and Ai ends turn.
+        print("Playing card");
+        for (int i = 0; i < hand.Count; i++)
         {
-            AI = States.endTurn;
-        }
-        //AI plays a card without Advanced algorithm (This will change in next scrum)
-        for (int i = 0; i < playable.Count; i++)
-        {
-            if (mana > 0)
+            activeCard = hand[i];//Ai start going thru cards
+            int mC = activeCard.GetComponent<AICard>().manaCost; //Checking cost
+            if (mC <= mana) //Ai can play card.
             {
-                GameObject pickFromHand = playable[i];//Saves the choice from list.
-                table.Add(pickFromHand);
-                pickFromHand.GetComponent<AICard>().played = true;
-                mana -= pickFromHand.GetComponent<AICard>().manaCost;//AI spends mana to play card
-                playable[i] = null;
+                table.Add(hand[i]);//Add to list of cards AI is about to play.
+                mana -= mC; //draws cost.
+            }
+            if (mana == 0 || i == hand.Count) //Switch state if mana i spent or ai cycled thru all cards. 
+            {
+                print("Playing to table");
+                AI = States.cardToTable;//Switch state.
             }
         }
-        AI = States.useCards;
+        //AI = States.useCards;
     }
+    void CardToTable()
+    {
+        if (table.Count != 0)//Checking if list contains cards and deals them.
+        {
+            
+            activeCard = table[0];//Store first card in stack.
+             //Remove so next item in list gets place [0]
+            print("Moving Card to Table");
+            AI = States.moveToTable; //Enter state to move stored card to table.
+        }
+        else  //if ai didn't afford any cards it tries to use a skill. !!Ai should go to use skill after this step but this will be implemented later!!
+        {
+            //AI = States.useSkill;
+            AI = States.useCards;
+        }
+        
+
+    }
+    void MoveToTable() //!!This needs have funktion to set new offsets on card so they don't build ontop of eachother!! 
+    {
+        //FLIP CARD NEEDED
+        if (activeCard.transform.position != tableOffset.transform.position)//Checks if card is in hand if not moves it.
+        {
+            activeCard.transform.position = Vector3.MoveTowards(activeCard.transform.position, tableOffset.transform.position, cardSpeed * Time.deltaTime);
+        }
+        else //Movement complete.
+        {
+            //Clear card from stack.
+            table.RemoveAt(0);
+            AI = States.cardToTable; //Goes back to state to pick next card in stack.
+        }
+    }
+
     void UseCards()
     {
-        print(table);
+        print("Checking if cards are voke and attacking Ai Attacking");
+        //Use card method needed!!
+        AI = States.endTurn;
     }
     void EndTurn() //Ai is out of options and ends turn.
     {
         //Set cards on the table to voke.
         aiTurn = false;
+        //TrunButton call needed
+        print(aiTurn);
     }
+
 }
