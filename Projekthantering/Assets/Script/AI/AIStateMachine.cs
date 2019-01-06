@@ -115,7 +115,6 @@ public class AIStateMachine : MonoBehaviour
                 activeCard = deck[i]; //Makes first card in deck active.
                 cloneCard = Instantiate(activeCard); //Makes a copy off the prefab.
                 hand.Add(cloneCard); //Add card to hand
-                aIHandOffset.transform.position;
                 cloneCard.transform.position = aIHandOffset.transform.position; //Moves to hand !!THIS NEEDS ANIMATION!!
             }
         }
