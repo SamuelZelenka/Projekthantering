@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 847951414245393304}
   - component: {fileID: 847951414245393305}
   - component: {fileID: 847951414245393310}
-  - component: {fileID: 1050981490553774761}
   m_Layer: 9
   m_Name: CardPrefab (2)
   m_TagString: PlayerOneCard
@@ -103,7 +102,7 @@ Transform:
   m_GameObject: {fileID: 847951414245393308}
   m_LocalRotation: {x: -0.00000005960465, y: -0.7071068, z: -0.7071068, w: 0.00000005960465}
   m_LocalPosition: {x: 13.416264, y: -2.1194599, z: 5.127107}
-  m_LocalScale: {x: 1, y: 1.0000005, z: 1.0000005}
+  m_LocalScale: {x: 1.000001, y: 1.0000005, z: 1.0000005}
   m_Children:
   - {fileID: 847951416039567581}
   - {fileID: 847951415258173171}
@@ -122,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c61661c1b265a384ea8adb77f35c6f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myState: 0
   cardName: Grove
   cardType: 
   cardText: 
@@ -130,6 +130,8 @@ MonoBehaviour:
   manaCost: 0
   frame: {fileID: 0}
   portrait: {fileID: 0}
+  myHand: {fileID: 0}
+  isMouseDown: 0
 --- !u!65 &847951414245393305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -159,18 +161,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1050981490553774761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847951414245393308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2dc09523c74ffd48a61e211110e31a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &847951414263993506
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,7 +409,6 @@ GameObject:
   - component: {fileID: 847951415258173171}
   - component: {fileID: 847951415258173164}
   - component: {fileID: 847951415258173165}
-  - component: {fileID: 847951415258173170}
   m_Layer: 9
   m_Name: Quad
   m_TagString: Untagged
@@ -486,20 +475,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &847951415258173170
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847951415258173168}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &847951415328579685
 GameObject:
   m_ObjectHideFlags: 0

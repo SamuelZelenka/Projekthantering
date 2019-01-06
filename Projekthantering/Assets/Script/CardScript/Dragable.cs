@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dragable : MonoBehaviour
 {
-    bool ifPlaced;
+    public bool isMouseDown;
 
     private Vector3 mOffset;
 
@@ -13,9 +13,9 @@ public class Dragable : MonoBehaviour
     void OnMouseDown()
     {
         mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
-
+        GetComponent<Card>().SetState(Card.CardState.PickedUp);
         mOffset = gameObject.transform.position - GetMouseWorldPos();
-            
+        isMouseDown = true;
     }
 
     Vector3 GetMouseWorldPos()
@@ -29,21 +29,18 @@ public class Dragable : MonoBehaviour
 
     void OnMouseDrag()
     {
-        transform.position = GetMouseWorldPos() + mOffset;
+        if (isMouseDown)
+        {
+            transform.position = GetMouseWorldPos() + mOffset;
+        }
     }
 
     void Update()
     {
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
+        if(Input.GetMouseButtonUp(0))
         {
-            if (hit.collider.gameObject.tag == "Table" && Input.GetMouseButton(0) == false)
-            {
-                gameObject.transform.position = new Vector3(0.16f, 2.7f, 4.08f);
-
-                ifPlaced = true;
-            }
+            GetComponent<Card>().SetState(Card.CardState.InHand);
+            isMouseDown = false;
         }
     }
 }
