@@ -18,7 +18,6 @@ public class CardHand : MonoBehaviour {
     GameObject inspectCard;
     bool isCreated;
 
-
     // Use this for initialization
     void Start ()
     {
@@ -39,12 +38,12 @@ public class CardHand : MonoBehaviour {
             {
                 AddCardFromDeck();
             }
-
         }
-
+        
+       
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            if (hit.collider.CompareTag("PlayerOneCard"))
+            if (hit.collider.GetComponent<Card>() != null && hit.collider.GetComponent<Card>().GetState() == Card.CardState.InHand)
             {
                 if (inspectedCard != hit.collider.gameObject)
                 {
@@ -52,13 +51,17 @@ public class CardHand : MonoBehaviour {
                     Destroy(instancedCard);
                     isCreated = false;
                 }
-                inspectedCard = hit.collider.gameObject;
-                InspectCard(hit.collider.gameObject);
+                    inspectedCard = hit.collider.gameObject;
+                    InspectCard(hit.collider.gameObject);
+            }
+            else
+            {
+                Destroy(instancedCard);
+                isCreated = false;
             }
         }
         else
         {
-            SortCards();
             Destroy(instancedCard);
             isCreated = false;
         }
@@ -80,9 +83,22 @@ public class CardHand : MonoBehaviour {
             myPlayer.GetComponent<PlayerScript>().RemoveHealth(1);
         }
     }
+    public void RemoveCardFromHand(GameObject removeCard)
+    {
+        for (int i = 0; i < myCards.Count; i++)
+        {
+            if(myCards[i] == removeCard)
+            {
+                myCards.RemoveAt(i);
+            }
+        }
+    }
+
     public void AddCardToHand(GameObject newCard)
     {
+        newCard.GetComponent<Card>().SetState(Card.CardState.InHand);
         newCard.transform.SetParent(transform);
+        newCard.GetComponent<Card>().myHand = gameObject;
         myCards.Add(newCard);
         SortCards();
     }
@@ -94,18 +110,18 @@ public class CardHand : MonoBehaviour {
 
             for (int i = 0; i < myCards.Count; i++)
             {
-                //myCards[i].GetComponent<SpriteRenderer>().sortingOrder = i;
                 myCards[i].transform.position = new Vector3(transform.position.x + xOffset * i, transform.position.y + (0.1f * i), transform.position.z + zOffset * i);
                 myCards[i].transform.localRotation = Quaternion.Euler(90, 0, rotationZOffset * i);
             }
             transform.rotation = Quaternion.Euler(0, (rotationZOffset / 2) * (myCards.Count - 1), 0);
         }
     }
-    void InspectCard(GameObject Card)
+    void InspectCard(GameObject card)
     {
         if (!isCreated)
         {
-            instancedCard = Instantiate(Card, inspectCard.transform.position, Quaternion.Euler(90, 0, 0)) as GameObject;
+            SortCards();
+            instancedCard = Instantiate(card, inspectCard.transform.position, Quaternion.Euler(90, 0, 0)) as GameObject;
             instancedCard.tag = "Untagged";
             instancedCard.transform.parent = inspectCard.transform;
             isCreated = true;
