@@ -16,8 +16,9 @@ public class ReadCardData : MonoBehaviour
     {
         cardlist = new List<CardData>();
         string readLine;
-       
-        readData = new StreamReader(textPath);
+
+
+        readData = new StreamReader(Application.dataPath + "/Data/DataFiles/CardData.txt");
         while ((readLine = readData.ReadLine()) != null)
         {
             ConvertStringToData(readLine);
@@ -35,7 +36,21 @@ public class ReadCardData : MonoBehaviour
     {
         //data [0-7]{name, health, manacost, attack, cardtext, taunt, charge, battlecry}
         string[] data = line.Split('\t');
-        cardlist.Add(new CardData(data[0], int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4], StringToBool(data[5]), StringToBool(data[6]), StringToBool(data[7]), StringToBool(data[8]), data[9]));
+        cardlist.Add(new CardData(
+            data[0],
+            int.Parse(data[1]),
+            int.Parse(data[2]),
+            int.Parse(data[3]),
+            data[4],
+            StringToBool(data[5]),
+            StringToBool(data[6]),
+            StringToBool(data[7]),
+            StringToBool(data[8]),
+            StringToBool(data[9]),
+            StringToBool(data[10]),
+            StringToBool(data[11]),
+            data[12],
+            StringToBool(data[13])));
     }
     bool StringToBool(string input)
     {
@@ -72,12 +87,16 @@ public class CardData
     public bool taunt;
     public bool charge;
     public bool battlecry;
+    public bool rush;
     public bool drunkRage;
+    public bool inspire;
+    public bool deathRattle;
     public string cardType;
+    public bool heroCard;
     public Sprite cardFrame;
     public Sprite cardPortrait;
 
-    public CardData(string name, int health, int manacost, int attack, string cardText, bool taunt, bool charge, bool battlecry, bool drunkRage, string cardType)
+    public CardData(string name, int health, int manacost, int attack, string cardText, bool taunt, bool charge, bool battlecry, bool rush, bool drunkRage, bool inspire, bool deathRattle, string cardType, bool heroCard )
     {
         this.name = name;
         this.health = health;
@@ -87,8 +106,12 @@ public class CardData
         this.taunt = taunt;
         this.charge = charge;
         this.battlecry = battlecry;
+        this.rush = rush;
         this.drunkRage = drunkRage;
+        this.inspire = inspire;
+        this.deathRattle = deathRattle;
         this.cardType = cardType;
+        this.heroCard = heroCard;
         this.cardFrame =  (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Frames/{cardType}.png", typeof(Sprite));
         this.cardPortrait = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Portraits/{name}.png", typeof(Sprite));
     }
