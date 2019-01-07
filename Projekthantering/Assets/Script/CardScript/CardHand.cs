@@ -18,7 +18,6 @@ public class CardHand : MonoBehaviour {
     GameObject inspectCard;
     bool isCreated;
 
-
     // Use this for initialization
     void Start ()
     {
@@ -39,7 +38,6 @@ public class CardHand : MonoBehaviour {
             {
                 AddCardFromDeck();
             }
-
         }
         
        
