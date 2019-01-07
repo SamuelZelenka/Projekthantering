@@ -14,6 +14,7 @@ public class GameBoard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cardOffset = 10;
         startPos = transform.position;
     }
 
@@ -64,7 +65,7 @@ public class GameBoard : MonoBehaviour
 
                     newPosition = newPosition - (newPosition - startPos);
 
-                    transform.position = new Vector3(newPosition.x, transform.position.y, transform.position.z);
+                    other.transform.position = new Vector3(newPosition.x, transform.position.y, transform.position.z);
                 }
             }
         }
