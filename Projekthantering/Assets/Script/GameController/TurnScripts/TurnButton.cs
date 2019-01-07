@@ -38,13 +38,13 @@ public class TurnButton : MonoBehaviour
         if (startTurn == 1)
         {
             myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
-            myPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
+            //myPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
             myTurn = false;
         }
         if (startTurn == 2)
         {
             aiPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
-            aiPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
+            //aiPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
             myTurn = true;
         }
     }
