@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/UiMenu - Viktor.unity
     guid: 8a054eb98d7cb4f4d9399372e1f6cf4d
   - enabled: 1
-    path: Assets/Scenes/UiChooseDeck.unity
+    path: Assets/Scenes/HeroAndCardSelection.unity
     guid: c6eb50b4c86114a4cb03b7d571772551
   - enabled: 1
     path: Assets/Scenes/Samuel.unity
