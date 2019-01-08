@@ -21,7 +21,7 @@ public class GameBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        ArrangeCards();
     }
     private void OnTriggerStay(Collider other)
     {
@@ -65,7 +65,7 @@ public class GameBoard : MonoBehaviour
 
                     newPosition = newPosition - (newPosition - startPos);
 
-                    other.transform.position = new Vector3(newPosition.x, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(newPosition.x, transform.position.y, transform.position.z);
                 }
             }
         }
@@ -78,6 +78,20 @@ public class GameBoard : MonoBehaviour
                 other.GetComponent<Card>().SetState(Card.CardState.Played);
                 other.gameObject.tag = "Untagged";
             }
+        }
+    }
+
+    void ArrangeCards()
+    {
+        float newPos;
+        for (int i = 0; i < cardsOnTable.Count; i++)
+        {
+            newPos = (cardsOnTable.Count / 2) + i;
+            if (i - 1 == (int)(cardsOnTable.Count / 2))
+            {
+                newPos += 2;
+            }
+            cardsOnTable[i].transform.position = new Vector3(startPos.x + newPos * cardOffset, startPos.y, startPos.z);
         }
     }
 }
