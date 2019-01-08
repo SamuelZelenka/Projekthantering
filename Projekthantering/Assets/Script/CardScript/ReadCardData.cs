@@ -17,7 +17,6 @@ public class ReadCardData : MonoBehaviour
         cardlist = new List<CardData>();
         string readLine;
 
-
         readData = new StreamReader(Application.dataPath + "/Data/DataFiles/CardData.txt");
         while ((readLine = readData.ReadLine()) != null)
         {
