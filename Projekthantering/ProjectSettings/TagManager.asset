@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PlayerOneCard
   - AICard
+  - GameBoard
+  - CardHolder
   layers:
   - Default
   - TransparentFX
