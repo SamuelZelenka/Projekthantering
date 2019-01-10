@@ -25,20 +25,16 @@ public class CardHand : MonoBehaviour {
         myPlayer = transform.parent.gameObject;
         isCreated = false;
         inspectCard = GameObject.Find("InspectCard");
+        for (int i = 0; i < 3; i++)
+        {
+            AddCardFromDeck();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (gameController.GetComponent<GameController>().playedTurns == 0 && myCards.Count == 0)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                AddCardFromDeck();
-            }
-        }
         
        
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -87,7 +83,7 @@ public class CardHand : MonoBehaviour {
     {
         for (int i = 0; i < myCards.Count; i++)
         {
-            if(myCards[i] == removeCard)
+            if(myCards[i].name == removeCard.name)
             {
                 myCards.RemoveAt(i);
             }
