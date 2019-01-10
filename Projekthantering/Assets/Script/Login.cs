@@ -69,7 +69,7 @@ public class Login : MonoBehaviour
         {
             usernameObject.GetComponent<InputField>().text = "";
             passwordObject.GetComponent<InputField>().text = "";
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("HeroAndCardSelection");
         }
     }
 
