@@ -38,7 +38,7 @@ public class AIStateMachine : MonoBehaviour
     //Positions offsets
     public Transform deckOffset;//Were to spawn cards
     public Transform aIHandOffset;//Were ai hand is located.
-    public Transform tableOffset;
+    public Transform tableOffset;//Where Ai places cards.
     
 
     GameObject turnButton;//To get calls from button switch AI trun,
@@ -60,7 +60,7 @@ public class AIStateMachine : MonoBehaviour
             GameObject newCard;
             newCard = Instantiate((GameObject)loadCard,transform.parent);// transform.GetChild(0).transform
             newCard.transform.position = deckOffset.transform.position;
-            newCard.transform.localScale = new Vector3(2, 2, 2);
+            newCard.transform.localScale = new Vector3(2, 2, 2); //Places cards in deck holder.
             newCard.GetComponent<Card>().cardName = deckData[i];
             deck.Add(newCard);
 
