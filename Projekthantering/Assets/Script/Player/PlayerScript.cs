@@ -13,12 +13,14 @@ public class PlayerScript : MonoBehaviour
     TextMesh healthText, attackText, armorText;
     GameObject attackIcon, armorIcon;
 
-    int maxHealth = 30;
+    public int maxHealth = 30;
+    public int maxMana;
 
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
+        maxMana = 1;
         healthText = GameObject.Find($"{name}/PlayerVisual/Health/HealthText").GetComponent<TextMesh>();
         attackText = GameObject.Find($"{name}/PlayerVisual/Attack/AttackText").GetComponent<TextMesh>();
         armorText = GameObject.Find($"{name}/PlayerVisual/Armor/ArmorText").GetComponent<TextMesh>();
