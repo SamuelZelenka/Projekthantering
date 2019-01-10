@@ -9,14 +9,15 @@ public class TurnButton : MonoBehaviour
 
     float maxTurnTime;
     [SerializeField] float turnTimer;
-    bool myTurn;
-    Animation rotateAnim;
+    [SerializeField] bool myTurn;
     GameObject myPlayer;
     GameObject aiPlayer;
 
-    Animation uiTurnSplashAnim;
     Text uiTimer;
     GameObject gameController;
+    GameObject ai;
+
+    float buttonAngle;
 
     int startTurn;
     public System.Random coinFlip = new System.Random();
@@ -24,27 +25,22 @@ public class TurnButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ai = GameObject.Find("AI");
         gameController = GameObject.Find("GameController");
         myPlayer = transform.parent.gameObject;
         aiPlayer = transform.parent.gameObject;
         maxTurnTime = 30;
         turnTimer = maxTurnTime;
         myTurn = true;
-        rotateAnim = GetComponent<Animation>();
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
-        uiTurnSplashAnim = GameObject.Find("YourTurnSplash").GetComponent<Animation>();
         startTurn = coinFlip.Next(1, 3);
 
         if (startTurn == 1)
         {
-            myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
-            //myPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
             myTurn = false;
         }
         if (startTurn == 2)
         {
-            aiPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
-            //aiPlayer.GetComponentInChildren<ReadCardData>().GetCardData("The Coin");
             myTurn = true;
         }
     }
@@ -69,17 +65,16 @@ public class TurnButton : MonoBehaviour
             turnTimer -= Time.deltaTime; // countdown turntimer
         }
 
-        if(Input.GetKeyUp(KeyCode.LeftControl)) //!PLACEHOLDER! for other players turn !PLACEHOLDER!
-        {
-            ResetTurn();
-        }
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(buttonAngle, 180, 0)), 0.2f);
     }
 
-    private void OnMouseOver()
+    private void OnMouseUp()
     {
+        
         if (myTurn)
         {
-            if (Input.GetAxis("Mouse 1") == 1) //if button is clicked on
+            print("click");
+            if (Input.GetMouseButtonUp(0))
             {
                 EndTurn();
             }
@@ -87,18 +82,22 @@ public class TurnButton : MonoBehaviour
     }
     void EndTurn()
     {
-        rotateAnim.Play("EndTurn");
+        foreach (GameObject card in GameObject.Find($"{myPlayer.name}/GameBoard").GetComponent<GameBoard>().cardsOnTable)
+        {
+            card.GetComponent<Card>().sleep = false;
+        }
         myTurn = false;
-        
+        ai.GetComponent<AIStateMachine>().aiTurn = true;
+        buttonAngle = 180;
         gameController.GetComponent<GameController>().newTurn();
     }
 
-    void ResetTurn()
+    public void ResetTurn()
     {
-        rotateAnim.Play("ResetButton");
+        print("reset");
+        buttonAngle = 0;
         turnTimer = maxTurnTime;
         myTurn = true;
-        uiTurnSplashAnim.Play();
         myPlayer.GetComponentInChildren<CardHand>().AddCardFromDeck();
 
     }

@@ -24,17 +24,6 @@ public class GameBoard : MonoBehaviour
                 cardHolders.Add(transform.GetChild(i).gameObject);
             }
         }
-        for (int i = 0; i < cardHolders.Count; i++)
-        {
-            if(cardHolders[i].transform.GetChild(0) != null && cardHolders[i].transform.GetChild(0).GetComponent<Card>().GetState() == Card.CardState.Played)
-            {
-                cardsOnTable.Add(cardHolders[i].transform.GetChild(0).gameObject);
-            }
-            else if(cardHolders[i].transform.GetChild(0) != null)
-            {
-                cardHolders.RemoveAt(i);
-            }
-        }
     }
 
 }
