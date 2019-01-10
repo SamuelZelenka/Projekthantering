@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AIStateMachine : MonoBehaviour
 {
-    bool aiTurn = true; //Ai turn to play.
+    public bool aiTurn = false; //Ai turn to play.
     bool firstTurn;
     //Enum
     [SerializeField] enum States { init, pickNewCard, cardToHand, playCard, cardToTable, moveToTable, useCards, useSkill, endTurn, wait};
@@ -36,13 +36,28 @@ public class AIStateMachine : MonoBehaviour
     public Transform aIHandOffset;//Were ai hand is located.
     public Transform tableOffset;
 
+    GameObject turnButton;
+     
+
+    string[] deckData;
+
     // Start is called before the first frame update
     void Start()
     {
         AI = States.init; //Starting state for ai.
         Strategy = Behaviour.passive; //Starting behaviour for ai.
         firstTurn = true;
-        
+        turnButton = GameObject.Find("TurnButton");
+
+        deckData = txtToString.Convert("AIDeck", "AI");
+        for (int i = 0; i < deckData.Length; i++)
+        {
+            Object loadCard = Resources.Load("Cards/CardPrefab");
+            GameObject newCard;
+            newCard = Instantiate((GameObject)loadCard, transform.GetChild(0).transform);
+            newCard.GetComponent<Card>().cardName = deckData[i];
+            deck.Add(newCard);
+        }
     }
 
     // Update is called once per frame
@@ -98,9 +113,9 @@ public class AIStateMachine : MonoBehaviour
             {
                 GameObject sleepingCard;
                 sleepingCard = item;
-                if (sleepingCard.GetComponent<AICard>().sleep == true)
+                if (sleepingCard.GetComponent<Card>().sleep == true)
                 {
-                    sleepingCard.GetComponent<AICard>().sleep = false;
+                    sleepingCard.GetComponent<Card>().sleep = false;
                 }
             }
         }
@@ -112,8 +127,8 @@ public class AIStateMachine : MonoBehaviour
                 {
                     break;
                 }
-                activeCard = deck[i]; //Makes first card in deck active.
-                cloneCard = Instantiate(activeCard); //Makes a copy off the prefab.
+                
+                cloneCard = deck[i];
                 hand.Add(cloneCard); //Add card to hand
                 cloneCard.transform.position = aIHandOffset.transform.position; //Moves to hand !!THIS NEEDS ANIMATION!!
             }
@@ -156,11 +171,12 @@ public class AIStateMachine : MonoBehaviour
         for (int i = 0; i < hand.Count; i++)
         {
             activeCard = hand[i];//Ai start going thru cards
-            int mC = activeCard.GetComponent<AICard>().manaCost; //Checking cost
-            if (mC <= mana) //Ai can play card.
+            int manaCost = activeCard.GetComponent<Card>().manaCost; //Checking cost
+            if (manaCost <= mana) //Ai can play card.
             {
-                table.Add(hand[i]);//Add to list of cards AI is about to play.
-                mana -= mC; //draws cost.
+                table.Add(hand[i]);//Add to list of cards AI is about to play.'
+                hand.RemoveAt(0);
+                mana -= manaCost; //draws cost.
             }
             if (mana == 0 || i == hand.Count) //Switch state if mana i spent or ai cycled thru all cards. 
             {
@@ -175,7 +191,7 @@ public class AIStateMachine : MonoBehaviour
         if (table.Count != 0)//Checking if list contains cards and deals them.
         {
             
-            activeCard = table[0];//Store first card in stack.
+            activeCard = table[0];//Store first card in list.
              //Remove so next item in list gets place [0]
             print("Moving Card to Table");
             AI = States.moveToTable; //Enter state to move stored card to table.
@@ -198,7 +214,6 @@ public class AIStateMachine : MonoBehaviour
         else //Movement complete.
         {
             //Clear card from stack.
-            table.RemoveAt(0);
             AI = States.cardToTable; //Goes back to state to pick next card in stack.
         }
     }
@@ -212,7 +227,9 @@ public class AIStateMachine : MonoBehaviour
     void EndTurn() //Ai is out of options and ends turn.
     {
         //Set cards on the table to voke.
+        turnButton.GetComponent<TurnButton>().ResetTurn();
         aiTurn = false;
+        AI = States.init;
         //TrunButton call needed
         print(aiTurn);
     }

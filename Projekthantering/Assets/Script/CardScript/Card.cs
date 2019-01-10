@@ -17,9 +17,14 @@ public class Card : MonoBehaviour
     public Sprite frame, portrait;
     Text showHp, showAttack, showCardName, showCardText, showManaCost, showCardType;
     Image showFrame, showPortrait;
+
     GameObject gameController;
     public GameObject myHand;
     Collider myCollider;
+
+    public bool sleep;
+    [SerializeField] bool isPlayed;
+    RaycastHit hit;
 
     bool isColliding;
     public bool isMouseDown;
@@ -73,37 +78,23 @@ public class Card : MonoBehaviour
 
         myCollider = GetComponent<Collider>();
         myState = CardState.InDeck;
+        isPlayed = false;
+        sleep = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity);
         showHp = GameObject.Find("DisplayHp").GetComponent<Text>();
         showHp.text = "" + hp;
-        if(!isColliding && myState == CardState.Released)
+        if(!isColliding && myState == CardState.Released && !isPlayed)
         {
             SetState(CardState.InHand);
         }
-
         if (isMouseDown)
         {
             transform.position = GetMouseWorldPos() + mOffset;
-        }
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.tag == "GameBoard")
-        {
-            isColliding = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "GameBoard")
-        {
-            transform.SetParent(myHand.transform);
-            isColliding = false;
         }
     }
 
@@ -120,6 +111,7 @@ public class Card : MonoBehaviour
     void OnMouseDown()
     {
         mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+
         SetState(CardState.PickedUp);
         mOffset = gameObject.transform.position - GetMouseWorldPos();
 
@@ -133,11 +125,33 @@ public class Card : MonoBehaviour
            
             SetState(CardState.Released);
             isMouseDown = false;
-            if (myState == CardState.InHand)
+            if (isPlayed)
             {
-                transform.parent.gameObject.GetComponent<CardHand>().SortCards();
+                MoveCardToHolder();
+            }
+            else
+            {
+                if (hit.collider != null && hit.collider.tag == "CardHolder" && hit.collider.transform.childCount == 0)
+                {
+                    SetState(CardState.Played);
+                    transform.SetParent(hit.transform);
+                    MoveCardToHolder();
+                    myHand.GetComponent<CardHand>().RemoveCardFromHand(gameObject);
+                    hit.collider.transform.GetComponentInParent<GameBoard>().cardsOnTable.Add(gameObject);
+                    isPlayed = true;
+                    tag = "Untagged";
+                }
+                if (myState == CardState.InHand)
+                {
+                    transform.parent.gameObject.GetComponent<CardHand>().SortCards();
+                }
             }
         }
+    }
+    void MoveCardToHolder()
+    {
+        transform.position = transform.parent.position + new Vector3(0,2,0);
+        transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 
 
