@@ -60,6 +60,7 @@ public class AIStateMachine : MonoBehaviour
             GameObject newCard;
             newCard = Instantiate((GameObject)loadCard,transform.parent);// transform.GetChild(0).transform
             newCard.transform.position = deckOffset.transform.position;
+            newCard.transform.localScale = new Vector3(2, 2, 2);
             newCard.GetComponent<Card>().cardName = deckData[i];
             deck.Add(newCard);
 
