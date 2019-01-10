@@ -11,18 +11,21 @@ public class AIStateMachine : MonoBehaviour
     bool firstTurn;
     //Enum
     [SerializeField] enum States { init, pickNewCard, cardToHand, playCard, cardToTable, moveToTable, useCards, useSkill, endTurn, wait};
-    [SerializeField] enum Behaviour { passive, agressive, defensive}
+    [SerializeField] enum Behaviour { passive, agressive, defensive}//Strategy states (Not Implemented yet)
     [SerializeField] States AI; 
-    [SerializeField] Behaviour Strategy;
+    [SerializeField] Behaviour Strategy; //Ai behaviour and strategy (Not implemented yet)!
 
     //Lists
     public List<GameObject> deck; //Ai deck of cards.
     [SerializeField] List<GameObject> hand;//Cards drawn form deck.
-    [SerializeField] List<GameObject> table;
+    [SerializeField] List<GameObject> table;//Cards AI plays to the table.
+    [SerializeField] List<GameObject> pickedCardsToPlay; //Cards AI affords to play during turn.
+    public List<GameObject> cardHolderOffset;//Places to play cards on table.
 
     //Referens objects
     [SerializeField] GameObject activeCard; //Card picked from deck and used for actions.
-    [SerializeField] GameObject cloneCard;
+    [SerializeField] GameObject cloneCard; //Used in the Instantiate process of cards and when moved from deck to hand.
+    [SerializeField] GameObject freeSpace; //Free space for ai to play on board.
 
     //Variables
     [SerializeField] int cardOrder = 0;//What card been picked in order.
@@ -31,15 +34,16 @@ public class AIStateMachine : MonoBehaviour
     public float cardSpeed;//How fast card moves on table.
     public int hp = 30;
     public int mana;
+    [SerializeField] int currentMana = 0;//This is the amount of cards the Ai picks from hand to put on table.
     //Positions offsets
     public Transform deckOffset;//Were to spawn cards
     public Transform aIHandOffset;//Were ai hand is located.
     public Transform tableOffset;
+    
 
-    GameObject turnButton;
+    GameObject turnButton;//To get calls from button switch AI trun,
      
-
-    string[] deckData;
+    string[] deckData; //Bring in cards from .txt
 
     // Start is called before the first frame update
     void Start()
@@ -54,10 +58,13 @@ public class AIStateMachine : MonoBehaviour
         {
             Object loadCard = Resources.Load("Cards/CardPrefab");
             GameObject newCard;
-            newCard = Instantiate((GameObject)loadCard, transform.GetChild(0).transform);
+            newCard = Instantiate((GameObject)loadCard,transform.parent);// transform.GetChild(0).transform
+            newCard.transform.position = deckOffset.transform.position;
             newCard.GetComponent<Card>().cardName = deckData[i];
             deck.Add(newCard);
+
         }
+
     }
 
     // Update is called once per frame
@@ -72,6 +79,7 @@ public class AIStateMachine : MonoBehaviour
                     Init();
                     break;
                 case States.pickNewCard: //Picks a card from deck.
+                    firstTurn = false;
                     PickNewCard();
                     break;
                 case States.cardToHand: //Moves card to hand
@@ -105,7 +113,9 @@ public class AIStateMachine : MonoBehaviour
     }
     void Init() //AI Initializing, visual feedback to player and determines strategy(random, aggresive, defensive", adds mana), takes three card if its first turn.
     {
-        mana++;//AI Gets one mana/turn
+        print(aiTurn);
+        mana++;//AI Gets one mana/turn and adds it to pool.
+        currentMana = mana;//stores amount of mana AI got.
         Strategy = (Behaviour)Random.Range(0, 3); //Sets ai behavior.
         if (table != null)//Wakes any card that is played in previous sound
         {
@@ -134,6 +144,7 @@ public class AIStateMachine : MonoBehaviour
             }
         }
         print("Init done");
+        cloneCard = null;
         AI = States.pickNewCard; //Next state.
     }
     
@@ -168,52 +179,79 @@ public class AIStateMachine : MonoBehaviour
     void PlayCard()
     {
         print("Playing card");
-        for (int i = 0; i < hand.Count; i++)
+        if (hand.Count != 0) { //Ai has cards in hand.
+            
+            for (int i = 0; i < hand.Count; i++)
+            {
+                activeCard = hand[i];//Ai start going thru cards
+                int cardManaCost = activeCard.GetComponent<Card>().manaCost; //Checking cost
+
+                if (cardManaCost <= currentMana) //Ai can play card.
+                {
+                    pickedCardsToPlay.Add(hand[i]); //Add to list of card to play.
+                    hand.RemoveAt(i); //Removes from hand
+                    currentMana -= cardManaCost;//Spends mana
+                }
+            }
+            print("Done choosing cards");
+            AI = States.cardToTable;
+        }
+        else//Ai has not picke any cards so it switches to use cards on player.
         {
-            activeCard = hand[i];//Ai start going thru cards
-            int manaCost = activeCard.GetComponent<Card>().manaCost; //Checking cost
-            if (manaCost <= mana) //Ai can play card.
-            {
-                table.Add(hand[i]);//Add to list of cards AI is about to play.'
-                hand.RemoveAt(0);
-                mana -= manaCost; //draws cost.
-            }
-            if (mana == 0 || i == hand.Count) //Switch state if mana i spent or ai cycled thru all cards. 
-            {
-                print("Playing to table");
-                AI = States.cardToTable;//Switch state.
-            }
+            print("AI have no cards");
+            AI = States.cardToTable; 
         }
         //AI = States.useCards;
     }
-    void CardToTable()
+    void CardToTable()//Ai moves any card it is about to play to the table.
     {
-        if (table.Count != 0)//Checking if list contains cards and deals them.
+        if (pickedCardsToPlay.Count != 0)//Checking if ai picked a card and plays it.
         {
-            
-            activeCard = table[0];//Store first card in list.
-             //Remove so next item in list gets place [0]
-            print("Moving Card to Table");
-            AI = States.moveToTable; //Enter state to move stored card to table.
+            activeCard = pickedCardsToPlay[0];//Picks first card of choice.
+            table.Add(activeCard);//Add to table list;
+            pickedCardsToPlay.RemoveAt(0);//Removes it from card choice list.
+            foreach (GameObject item in cardHolderOffset)
+            {
+                if (item.GetComponent<CardHolderOffset>().noCard == true)
+                {
+                    print("Found a free spot");
+                    freeSpace = item;
+                    AI = States.moveToTable;
+                    break;
+                }
+            }
+            /*for (int i = 0; i < cardHolderOffset.Count; i++)//Ai checks table for free spot to play card
+            {
+                freeSpace = cardHolderOffset[i];
+                if (freeSpace.GetComponent<CardHolderOffset>().noCard == true)
+                {
+                    print("Found a free spot");
+                    
+                    AI = States.moveToTable; //Moves Specifik card to table.
+                    
+                }
+            }*/
+
         }
-        else  //if ai didn't afford any cards it tries to use a skill. !!Ai should go to use skill after this step but this will be implemented later!!
+        else  //Done playing any choicen cards to table.
         {
             //AI = States.useSkill;
             AI = States.useCards;
         }
-        
 
     }
     void MoveToTable() //!!This needs have funktion to set new offsets on card so they don't build ontop of eachother!! 
     {
         //FLIP CARD NEEDED
-        if (activeCard.transform.position != tableOffset.transform.position)//Checks if card is in hand if not moves it.
+        activeCard.transform.rotation =  Quaternion.Euler(90, 0, 0);
+        if (activeCard.transform.position != freeSpace.transform.position)//Checks if card is in hand if not moves it.
         {
-            activeCard.transform.position = Vector3.MoveTowards(activeCard.transform.position, tableOffset.transform.position, cardSpeed * Time.deltaTime);
+            activeCard.transform.position = Vector3.MoveTowards(activeCard.transform.position, freeSpace.transform.position, cardSpeed * Time.deltaTime);
         }
         else //Movement complete.
         {
             //Clear card from stack.
+            activeCard = null;
             AI = States.cardToTable; //Goes back to state to pick next card in stack.
         }
     }
@@ -230,8 +268,7 @@ public class AIStateMachine : MonoBehaviour
         turnButton.GetComponent<TurnButton>().ResetTurn();
         aiTurn = false;
         AI = States.init;
-        //TrunButton call needed
-        print(aiTurn);
+        
     }
 
 }
