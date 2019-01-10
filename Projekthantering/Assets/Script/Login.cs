@@ -10,11 +10,11 @@ using UnityEngine.SceneManagement;
 
 public class Login : MonoBehaviour
 {
-    public GameObject username;
-    public GameObject password;
+    public GameObject usernameObject;
+    public GameObject passwordObject;
     public Text infotext;
-    private string Username;
-    private string Password;
+    private string username;
+    private string password;
     private string[] lines;
 
 
@@ -24,8 +24,8 @@ public class Login : MonoBehaviour
         bool UN = false;
         bool PW = false;
         //path for where the users are saved
-        string path = (@"users/" + Username + ".txt");
-        if (Username != "")
+        string path = (Application.dataPath + $"/Data/Users/{username}.txt");
+        if (username != "")
         {
             if (File.Exists(path))
             {
@@ -44,11 +44,11 @@ public class Login : MonoBehaviour
             infotext.text = "Username field Empty";
         }
 
-        if (Password != "")
+        if (password != "")
         {
             if (File.Exists(path))
             {   //checks if the password on the second line of the txt file is the same
-                if (Password == lines[1])
+                if (password == lines[1])
             {
                 PW = true;
             }
@@ -67,8 +67,8 @@ public class Login : MonoBehaviour
         //if the username and the password is correct it changes the scene
         if (UN == true && PW == true)
         {
-            username.GetComponent<InputField>().text = "";
-            password.GetComponent<InputField>().text = "";
+            usernameObject.GetComponent<InputField>().text = "";
+            passwordObject.GetComponent<InputField>().text = "";
             SceneManager.LoadScene("MainMenu");
         }
     }
@@ -80,25 +80,25 @@ public class Login : MonoBehaviour
     {   //if the user wants to tab through the input fields
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (username.GetComponent<InputField>().isFocused)
+            if (usernameObject.GetComponent<InputField>().isFocused)
             {
-                password.GetComponent<InputField>().Select();
+                passwordObject.GetComponent<InputField>().Select();
             }
-            if (password.GetComponent<InputField>().isFocused)
+            if (passwordObject.GetComponent<InputField>().isFocused)
             {
-                username.GetComponent<InputField>().Select();
+                usernameObject.GetComponent<InputField>().Select();
             }
 
         }
         //if the user wants to push enter to login
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (Password != "" && Password != "")
+            if (password != "" && password != "")
             {
                 LoginButton();
             }
         }
-        Username = username.GetComponent<InputField>().text;
-        Password = password.GetComponent<InputField>().text;
+        username = usernameObject.GetComponent<InputField>().text;
+        password = passwordObject.GetComponent<InputField>().text;
     }
 }
