@@ -111,8 +111,8 @@ public class CardData
         this.deathRattle = deathRattle;
         this.cardType = cardType;
         this.heroCard = heroCard;
-        this.cardFrame =  (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Frames/{cardType}.png", typeof(Sprite));
-        this.cardPortrait = (Sprite)AssetDatabase.LoadAssetAtPath($"Assets/2D Textures/Cards/Portraits/{name}.png", typeof(Sprite));
+        this.cardFrame = Resources.Load<Sprite>($"2DTextures/Cards/Frames/{cardType}");
+        this.cardPortrait = Resources.Load<Sprite>($"2DTextures/Cards/Portraits/{name}");
     }
 
 }
