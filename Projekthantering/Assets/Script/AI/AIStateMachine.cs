@@ -151,23 +151,29 @@ public class AIStateMachine : MonoBehaviour
     
     void PickNewCard()//This method needs AI getting hurt if it runs out of cards
     {
-        lastCard = deck.Count;//Checks how many cards in deck. 
-        if (cardOrder == lastCard)//If AI on last card it starts from the beginning of deck again.This solution until the right cards are in play. REMOVES LATER!
+        if (deck == null) //No cards in ceck and Ai takes Damage
         {
-            cardOrder = 0;
+            hp -= 1;
+            AI = States.playCard;
         }
-        activeCard = deck[cardOrder]; //Draws card next in order.
-        cloneCard = Instantiate(activeCard); //Creates a clone of prefab
-        hand.Add(cloneCard);//Adds the clone of card to hand list
-        cardOrder++; //Increments the card order for next round.
-        cloneCard.transform.position = deckOffset.transform.position; //Sets position of card
+        //lastCard = deck.Count;//Checks how many cards in deck. 
+        //if (cardOrder == lastCard)//If AI on last card it starts from the beginning of deck again.This solution until the right cards are in play. REMOVES LATER!
+        //{
+        //    cardOrder = 0;
+        //}
+        activeCard = deck[0]; //Draws card next in order.
+        deck.RemoveAt(0);
+        //cloneCard = Instantiate(activeCard); //Creates a clone of prefab
+        hand.Add(activeCard);//Adds the clone of card to hand list
+        //cardOrder++; //Increments the card order for next round.
+        activeCard.transform.position = deckOffset.transform.position; //Sets position of card
         AI = States.cardToHand; //Next state
     }
     void CardToHand()
     {
-        if (cloneCard.transform.position != aIHandOffset.transform.position)//Checks if card is in hand if not moves it.
+        if (activeCard.transform.position != aIHandOffset.transform.position)//Checks if card is in hand if not moves it.
         {
-            cloneCard.transform.position = Vector3.MoveTowards(cloneCard.transform.position, aIHandOffset.transform.position, cardSpeed * Time.deltaTime);
+            activeCard.transform.position = Vector3.MoveTowards(activeCard.transform.position, aIHandOffset.transform.position, cardSpeed * Time.deltaTime);
         }
         else //Movement complete
         {
