@@ -119,6 +119,7 @@ public class CardHand : MonoBehaviour {
             SortCards();
             instancedCard = Instantiate(card, inspectCard.transform.position, Quaternion.Euler(90, 0, 0)) as GameObject;
             instancedCard.tag = "Untagged";
+            instancedCard.transform.localScale = new Vector3(3,3,3);
             instancedCard.transform.parent = inspectCard.transform;
             isCreated = true;
         }

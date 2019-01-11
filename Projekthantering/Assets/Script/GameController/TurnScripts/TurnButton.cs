@@ -35,14 +35,14 @@ public class TurnButton : MonoBehaviour
         uiTimer = GameObject.Find("UITimer").GetComponent<Text>();
         startTurn = coinFlip.Next(1, 3);
 
-        if (startTurn == 1)
+        /*if (startTurn == 1)
         {
             myTurn = false;
         }
         if (startTurn == 2)
         {
             myTurn = true;
-        }
+        }*/
     }
 
     // Update is called once per frame

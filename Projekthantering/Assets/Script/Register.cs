@@ -9,13 +9,13 @@ using System.Security.Cryptography;
 
 public class Register : MonoBehaviour
 {
-    public GameObject username;
-    public GameObject password;
-    public GameObject confpassword;
+    public GameObject usernameObject;
+    public GameObject passwordObject;
+    public GameObject confpasswordObject;
     public Text infotext;
-    private string Username;
-    private string Password;
-    private string ConfPassword;
+    private string username;
+    private string password;
+    private string confPassword;
     private string form;
 
 
@@ -24,8 +24,10 @@ public class Register : MonoBehaviour
         bool UN = false;
         bool PW = false;
         bool CPW = false;
-        string path = (@"users/" + Username + ".txt");
-        if (Username != "")
+        //string path = (Application.dataPath + $"/Data/Users/{username}.txt");
+        string userpath = username + "/";
+        string path = (@"users/" + userpath + username + ".txt");
+        if (username != "")
         {
 
             if (!File.Exists(path))
@@ -43,9 +45,9 @@ public class Register : MonoBehaviour
             infotext.gameObject.SetActive(true);
             infotext.text = "Username Empty";
         }
-        if (Password != "")
+        if (password != "")
         {
-            if (Password.Length > 5)
+            if (password.Length > 5)
             {
                 PW = true;
             }
@@ -62,9 +64,9 @@ public class Register : MonoBehaviour
         }
 
 
-        if (ConfPassword != "")
+        if (confPassword != "")
         {
-            if (ConfPassword == Password)
+            if (confPassword == password)
             {
                 CPW = true;
             }
@@ -80,17 +82,22 @@ public class Register : MonoBehaviour
             infotext.gameObject.SetActive(true);
             infotext.text = "Confirm Password field is empty";
         }
-        if (UN == true && PW ==true && CPW == true)
+        if (UN == true && PW == true && CPW == true)
         {   //saves the user into a text file, with the username on the first line and the password on the second line
-            form = (Username + Environment.NewLine + Password);
-            File.AppendAllText(path, form);
-            username.GetComponent<InputField>().text = "";
-            password.GetComponent<InputField>().text = "";
-            confpassword.GetComponent<InputField>().text = "";
-            infotext.gameObject.SetActive(true);
-            infotext.text = "Registration Complete";
-        }     
-        
+            form = (username + Environment.NewLine + password);
+            Directory.CreateDirectory(path + username);
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                writer.WriteLine(usernameObject.GetComponent<InputField>().text);
+                usernameObject.GetComponent<InputField>().text = "";
+                writer.WriteLine(passwordObject.GetComponent<InputField>().text);
+                passwordObject.GetComponent<InputField>().text = "";
+                confpasswordObject.GetComponent<InputField>().text = "";
+                infotext.gameObject.SetActive(true);
+                infotext.text = "Registration Complete";
+                writer.Close();
+            }
+        }
     }
     
     // Update is called once per frame
@@ -98,28 +105,28 @@ public class Register : MonoBehaviour
     {   //tab through all the input fields
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (username.GetComponent<InputField>().isFocused)
+            if (usernameObject.GetComponent<InputField>().isFocused)
             {
-                password.GetComponent<InputField>().Select();
+                passwordObject.GetComponent<InputField>().Select();
             }
-            if (password.GetComponent<InputField>().isFocused)
+            if (passwordObject.GetComponent<InputField>().isFocused)
             {
-                confpassword.GetComponent<InputField>().Select();
+                confpasswordObject.GetComponent<InputField>().Select();
             }
-            if (confpassword.GetComponent<InputField>().isFocused)
+            if (confpasswordObject.GetComponent<InputField>().isFocused)
             {
-                username.GetComponent<InputField>().Select();
+                usernameObject.GetComponent<InputField>().Select();
             }
         }//completes the registry with the enter key
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (Password != "" && Password !=""&&ConfPassword != "")
+            if (password != "" && password !=""&&confPassword != "")
             {
                 RegisterButton();
             }
         }
-        Username = username.GetComponent<InputField>().text;
-        Password = password.GetComponent<InputField>().text;
-        ConfPassword = confpassword.GetComponent<InputField>().text;   
+        username = usernameObject.GetComponent<InputField>().text;
+        password = passwordObject.GetComponent<InputField>().text;
+        confPassword = confpasswordObject.GetComponent<InputField>().text;   
     }
 }
