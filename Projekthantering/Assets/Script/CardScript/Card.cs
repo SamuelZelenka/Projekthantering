@@ -85,6 +85,7 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity);
         showHp = GameObject.Find("DisplayHp").GetComponent<Text>();
         showHp.text = "" + hp;
