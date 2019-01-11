@@ -24,7 +24,9 @@ public class Register : MonoBehaviour
         bool UN = false;
         bool PW = false;
         bool CPW = false;
-        string path = (Application.dataPath + $"/Data/Users/{username}.txt");
+        //string path = (Application.dataPath + $"/Data/Users/{username}.txt");
+        string userpath = username + "/";
+        string path = (@"users/" + userpath + username + ".txt");
         if (username != "")
         {
 
@@ -83,7 +85,7 @@ public class Register : MonoBehaviour
         if (UN == true && PW == true && CPW == true)
         {   //saves the user into a text file, with the username on the first line and the password on the second line
             form = (username + Environment.NewLine + password);
-
+            Directory.CreateDirectory(path + username);
             using (StreamWriter writer = new StreamWriter(path))
             {
                 writer.WriteLine(usernameObject.GetComponent<InputField>().text);
