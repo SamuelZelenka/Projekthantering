@@ -1,19 +1,15 @@
 fileFormatVersion: 2
-guid: f0b83a6a0067d15438cabbda41e0c26c
+guid: a51a1e4a37cd9ce48b959004c9cf1972
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: lambert2
-    2100002: anisotropic3
-    2100004: phong1
-    2100006: phongE1
-    2100008: anisotropic2
+    2100000: lambert3
+    2100002: anisotropic2
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCylinder14
-    2186277476908879412: ImportLogs
+    4300000: pSphere5
   externalObjects: {}
   materials:
     importMaterials: 1

@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: b7fc04534fdb0aa41ac6254487e04c99
+guid: aedb96be2a5aa0246a26ec45c4baeead
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2100000: lambert3
-    2100002: anisotropic2
+    2100002: anisotropic1
     2300000: //RootNode
     3300000: //RootNode
     4300000: pSphere5
