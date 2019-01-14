@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -118,7 +118,7 @@ Light:
     type: 3}
   m_PrefabInstance: {fileID: 3194780103661919589}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &365322652 stripped
+--- !u!114 &1066693121 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 245843726691679351, guid: 345d38e77b2e86542a145a070a8b3d3f,
     type: 3}
@@ -130,36 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &578725614 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 245843727377052711, guid: 345d38e77b2e86542a145a070a8b3d3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 245843728211225338}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1406715936 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 245843726478083640, guid: 345d38e77b2e86542a145a070a8b3d3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 245843728211225338}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1504454276 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 245843727139003895, guid: 345d38e77b2e86542a145a070a8b3d3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 245843728211225338}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1661417865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 245843727503048857, guid: 345d38e77b2e86542a145a070a8b3d3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 245843728211225338}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1943615904 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 245843727744907135, guid: 345d38e77b2e86542a145a070a8b3d3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 245843728211225338}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &245843728211225338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -279,34 +249,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 245843726187635442, guid: 345d38e77b2e86542a145a070a8b3d3f,
         type: 3}
-      propertyPath: usernameObject
-      value: 
-      objectReference: {fileID: 1943615904}
-    - target: {fileID: 245843726187635442, guid: 345d38e77b2e86542a145a070a8b3d3f,
-        type: 3}
-      propertyPath: passwordObject
-      value: 
-      objectReference: {fileID: 1504454276}
-    - target: {fileID: 245843726187635442, guid: 345d38e77b2e86542a145a070a8b3d3f,
-        type: 3}
       propertyPath: infotext
       value: 
-      objectReference: {fileID: 365322652}
-    - target: {fileID: 245843726799346431, guid: 345d38e77b2e86542a145a070a8b3d3f,
-        type: 3}
-      propertyPath: usernameObject
-      value: 
-      objectReference: {fileID: 1661417865}
-    - target: {fileID: 245843726799346431, guid: 345d38e77b2e86542a145a070a8b3d3f,
-        type: 3}
-      propertyPath: passwordObject
-      value: 
-      objectReference: {fileID: 1406715936}
-    - target: {fileID: 245843726799346431, guid: 345d38e77b2e86542a145a070a8b3d3f,
-        type: 3}
-      propertyPath: confpasswordObject
-      value: 
-      objectReference: {fileID: 578725614}
+      objectReference: {fileID: 1066693121}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 345d38e77b2e86542a145a070a8b3d3f, type: 3}
 --- !u!1001 &2230076987966024946
